@@ -1,0 +1,17 @@
+<html>
+<body>
+<script src="/static/javascript/lib/socket.io-1.1.0.js"></script>
+<script>
+  var socket = io('0.0.0.0:8000');
+
+  socket.on('response', function (data) {
+    console.log('response :', data);
+  });
+
+  function send() {
+    socket.emit('message', {messageText: "hello"});
+  }
+</script>
+<a href="#" onclick="javascript:send();">send</a>
+</body>
+</html>
