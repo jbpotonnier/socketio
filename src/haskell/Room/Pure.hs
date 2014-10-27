@@ -1,5 +1,5 @@
 module Pure (
-    newRoomsTable
+  newRoomsTable
   , addParticipant
   , removeParticipant
   , participants
