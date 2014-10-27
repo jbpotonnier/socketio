@@ -14,18 +14,18 @@ import qualified Data.Set as Set
 newRoomsTable :: RoomTable
 newRoomsTable = Map.empty
 
-addParticipant :: RoomTable -> RoomId -> Participant -> RoomTable
-addParticipant roomTable roomId participant =
-  Map.insertWith Set.union roomId (Set.singleton participant) roomTable
+addParticipant :: RoomId -> Participant -> RoomTable -> RoomTable
+addParticipant roomId participant =
+  Map.insertWith Set.union roomId (Set.singleton participant)
 
-removeParticipant :: RoomTable -> RoomId -> Participant -> RoomTable
-removeParticipant roomTable roomId participant =
-  Map.alter newParticipants roomId roomTable
+removeParticipant :: RoomId -> Participant -> RoomTable -> RoomTable
+removeParticipant roomId participant =
+  Map.alter newParticipants roomId
   where
     newParticipants :: Maybe (Set Participant) -> Maybe (Set Participant)
     newParticipants maybeSet = do
       new <- fmap (\s -> s \\ Set.singleton participant) maybeSet
       if Set.null new then Nothing else Just new
 
-participants :: RoomTable -> RoomId -> Set Participant
-participants table roomId = Map.findWithDefault Set.empty roomId table
+participants :: RoomId -> RoomTable -> Set Participant
+participants = Map.findWithDefault Set.empty

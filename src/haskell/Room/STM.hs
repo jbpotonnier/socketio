@@ -13,20 +13,19 @@ import Control.Concurrent.STM (STM, TVar, newTVar, readTVar, writeTVar)
 import Control.Applicative ((<$>))
 
 newRoomsTable :: STM (TVar RoomTable)
-newRoomsTable = newTVar $ Pure.newRoomsTable
+newRoomsTable = newTVar Pure.newRoomsTable
 
 addParticipant :: TVar RoomTable -> RoomId -> Participant -> STM ()
 addParticipant roomTable roomId participant =
-  updateTVar roomTable $ \t -> Pure.addParticipant t roomId participant
+  updateTVar roomTable $ Pure.addParticipant roomId participant
 
 removeParticipant :: TVar RoomTable -> RoomId -> Participant -> STM ()
 removeParticipant roomTable roomId participant =
-  updateTVar roomTable $ \t -> Pure.removeParticipant t roomId participant
+  updateTVar roomTable $ Pure.removeParticipant roomId participant
 
 participants :: TVar RoomTable -> RoomId -> STM (Set Participant)
-participants roomTable roomId = do
-  table <- readTVar roomTable
-  return $ Pure.participants table roomId 
+participants roomTable roomId =
+  Pure.participants roomId <$> readTVar roomTable
       
 updateTVar :: TVar a -> (a -> a) -> STM ()
 updateTVar tvar h =
